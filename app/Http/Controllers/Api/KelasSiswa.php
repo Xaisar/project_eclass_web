@@ -113,7 +113,7 @@ class KelasSiswa extends Controller
             'course_id' => $request->id_course,
             'student_id' => $request->id_student,
             'study_year_id' => 1,
-            'semester_id' => 1,
+            'semester' => 1,
             'number_of_meetings' => $request->number_of_meeting,
             'date' => $request->date,
             'status' => 'present'
