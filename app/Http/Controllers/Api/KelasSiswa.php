@@ -8,6 +8,9 @@ use App\Models\Course;
 use App\Models\User;
 use App\Models\Student;
 use App\Models\Attendance;
+use App\Models\Assignment;
+use App\Models\KnowledgeAssessment;
+use App\Models\SkillAssessment;
 use App\Models\StudentClass;
 
 class KelasSiswa extends Controller
@@ -84,8 +87,14 @@ class KelasSiswa extends Controller
             ->with(['teacher', 'subject', 'classGroup.studentClass', 'classGroup.major', 'classGroup.degree', 'studyYear', 'basicComptence', 'videoConference', 'assignment'])
             ->orderBy('created_at', 'desc')
             ->first();
-
-        $kehadiran = Attendance::where('course_id', $course->id)->get();
+        //present
+        $kehadiran1 = Attendance::where(['course_id'=> $course->id, 'student_id' => $studentInfo->id, 'status' => 'present'])->get();
+        //absent
+        $kehadiran2 = Attendance::where(['course_id'=> $course->id, 'student_id' => $studentInfo->id, 'status' => 'absent'])->get();
+        //tugas pengetahuan
+        $TugasP = Assignment::where(['course_id'=> $course->id, 'type' => 'knowledge'])->get();
+        //tugas keterampilan
+        $TugasK = Assignment::where(['course_id'=> $course->id, 'type' => 'skill'])->get();
 
         // Menyiapkan data untuk ditampilkan pada tampilan
         $data = [
@@ -94,7 +103,10 @@ class KelasSiswa extends Controller
             // 'courses' => "${course}"
             'student' =>$studentInfo, 
             'courses' => $course,
-            'kehadiran' => $kehadiran
+            'kehadiran_present' => $kehadiran1,
+            'kehadiran_absent' => $kehadiran2,
+            'tugas_pengetahuan' => $TugasP,
+            'tugas_keterampilan' => $TugasK,
         ];
 
         // Mengembalikan respons dalam bentuk JSON
@@ -120,11 +132,39 @@ class KelasSiswa extends Controller
         ]);
 
         $data = [
-            // 'title' => 'Daftar Kelas',
-            // 'user' => "${users}",
-            // 'courses' => "${course}"
-            // 'student' =>$studentInfo, 
-            // 'courses' => $course,
+            'message' => "berhasil/tidak?"
+        ];
+
+        return response()->json($data);
+    }
+
+    public function postTugasKnowledge(Request $request){
+        KnowledgeAssessment::create([
+            'assignment_id' => $request->id_tugas,
+            'student_id' => $request->id_student,
+            'attachment_type' => $request->type,
+            'attachment' => $request->data,
+            'grade' => $request->grade,
+            'is_finished' => 1
+        ]);
+
+        $data = [
+            'message' => "berhasil/tidak?"
+        ];
+
+        return response()->json($data);
+    }
+
+    public function postTugasSkill(Request $request){
+        SkillAssessment::create([
+            'assignment_id' => $request->id_tugas,
+            'student_id' => $request->id_student,
+            'attachment_type' => $request->type,
+            'attachment' => $request->data,
+            'grade' => $request->grade,
+        ]);
+
+        $data = [
             'message' => "berhasil/tidak?"
         ];
 
