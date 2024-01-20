@@ -1,0 +1,39 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateShiftsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('shifts', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->time('start_entry');
+            $table->time('start_time_entry');
+            $table->time('last_time_entry');
+            $table->time('start_exit');
+            $table->time('start_time_exit');
+            $table->time('last_time_exit');
+            $table->boolean('status')->default(true);
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('shifts');
+    }
+}

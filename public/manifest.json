@@ -1,0 +1,19 @@
+{
+    "name": "E - Learning App",
+    "short_name": "E-Learning",
+    "description": "Application E-Learning",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f0f0f0",
+    "theme_color": "#4549a2",
+    "scope": "/",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "/assets/images/logo.png",
+            "type": "image/png",
+            "sizes": "1159x1159",
+            "purpose": "maskable any"
+        }
+    ]
+}
