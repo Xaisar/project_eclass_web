@@ -14,7 +14,8 @@ use App\Models\SkillAssessment;
 use App\Models\Notification;
 use App\Models\StudentClass;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Crypt;
+// use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Carbon;
 
 class KelasSiswa extends Controller
 {
@@ -189,10 +190,6 @@ class KelasSiswa extends Controller
     public function postGantiPassword(Request $request){
         $student = User::where('id', $request->id)->first();
 
-        // $password = bcrypt($user->password);
-        // print($user->password);
-        // print(Crypt::decryptString($user->password));
-
         if (!$student || !Hash::check($request->old_password, $student->password)) {
             $data = [
                 'berhasil' => 'false',
@@ -212,26 +209,33 @@ class KelasSiswa extends Controller
         ];
 
         return response()->json($data);
+    }
 
-        // if($user->password == $request->old_password){
-        //     $user->update([
-        //         'password' => $request->new_password
-        //     ]);
-
-        //     $data = [
-        //         'berhasil' => 'true',
-        //         'message' => "berhasil/tidak?"
-        //     ];
-    
-        //     return response()->json($data);
-        // } 
-
-        // $data = [
-        //     'berhasil' => 'false',
-        //     'message' => "passsword salah"
-        // ];
-
-        // return response()->json($data);
+    public function postGantiProfile(Request $request){
+        // $date1 = strtotime($request->tanggal_lahir);
+        // $final = date('d-m-Y' ,$date1);
+        // // $date = date_create($request->tanggal_lahir);
+        // // $final = date_format($date, 'Y-m-d');
+        // print($date1);
+        // // print($final);
+        // Carbon::createFromFormat('d-m-Y', $request->tgl_lahir)
         
+        $student = Student::where('id', $request->id)->first();
+
+        $student->update([
+            'name' => $request->nama,
+            'birthplace' => $request->tempat_lahir,
+            'birthdate' => $request->tanggal_lahir,
+            'email' => $request->email,
+            'phone_number' => $request->telpon,
+            'parent_phone_number' => $request->telpon_orangtua,
+            'address' => $request->alamat 
+        ]);
+
+        $data = [
+            'message' => "berhasil/tidak?"
+        ];
+
+        return response()->json($data);
     }
 }

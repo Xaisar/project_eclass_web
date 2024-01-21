@@ -28,6 +28,7 @@ Route::post('/student/classes2/tugasPengetahuan/upload', [KelasSiswa::class, 'po
 Route::post('/student/classes2/tugasKeterampilan/upload', [KelasSiswa::class, 'postTugasSkill']);
 Route::post('/student/Notifikasi', [KelasSiswa::class, 'getNotifikasi']);
 Route::post('/student/GantiPassword', [KelasSiswa::class, 'postGantiPassword']);
+Route::post('/student/GantiProfile', [KelasSiswa::class, 'postGantiProfile']);
 
 // Middleware 'auth:sanctum' digunakan untuk memastikan hanya pengguna yang sudah login yang dapat mengakses route berikutnya
 Route::middleware(['auth:sanctum'])->group(function () {
