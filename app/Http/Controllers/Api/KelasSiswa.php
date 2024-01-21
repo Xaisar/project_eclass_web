@@ -11,7 +11,10 @@ use App\Models\Attendance;
 use App\Models\Assignment;
 use App\Models\KnowledgeAssessment;
 use App\Models\SkillAssessment;
+use App\Models\Notification;
 use App\Models\StudentClass;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 
 class KelasSiswa extends Controller
 {
@@ -169,5 +172,66 @@ class KelasSiswa extends Controller
         ];
 
         return response()->json($data);
+    }
+
+    public function getNotifikasi(Request $request)
+    {
+        $notifikasi = Notification::where('user_id', $request->id)->get();
+        // Menyiapkan data untuk ditampilkan pada tampilan
+        $data = [
+            'notifikasi' => $notifikasi,
+        ];
+
+        // Mengembalikan respons dalam bentuk JSON
+        return response()->json($data);
+    }
+
+    public function postGantiPassword(Request $request){
+        $student = User::where('id', $request->id)->first();
+
+        // $password = bcrypt($user->password);
+        // print($user->password);
+        // print(Crypt::decryptString($user->password));
+
+        if (!$student || !Hash::check($request->old_password, $student->password)) {
+            $data = [
+                'berhasil' => 'false',
+                'message' => "passsword salah"
+            ];
+    
+            return response()->json($data);
+        }
+
+        $student->update([
+            'password' => bcrypt($request->new_password)
+        ]);
+
+        $data = [
+            'berhasil' => 'true',
+            'message' => "berhasil/tidak?"
+        ];
+
+        return response()->json($data);
+
+        // if($user->password == $request->old_password){
+        //     $user->update([
+        //         'password' => $request->new_password
+        //     ]);
+
+        //     $data = [
+        //         'berhasil' => 'true',
+        //         'message' => "berhasil/tidak?"
+        //     ];
+    
+        //     return response()->json($data);
+        // } 
+
+        // $data = [
+        //     'berhasil' => 'false',
+        //     'message' => "passsword salah"
+        // ];
+
+        // return response()->json($data);
+        
     }
 }
