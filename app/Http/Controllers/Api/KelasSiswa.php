@@ -71,7 +71,7 @@ class KelasSiswa extends Controller
         $data = [
             'title' => 'Daftar Kelas',
             // 'user' => "${users}",
-            // 'courses' => "${course}"
+            'student' => $studentInfo,
             'user' => $users,
             'courses' => $course
         ];
@@ -221,6 +221,7 @@ class KelasSiswa extends Controller
         // Carbon::createFromFormat('d-m-Y', $request->tgl_lahir)
         
         $student = Student::where('id', $request->id)->first();
+        $user = User::where('username', $request->username)->first();
 
         $student->update([
             'name' => $request->nama,
@@ -230,6 +231,11 @@ class KelasSiswa extends Controller
             'phone_number' => $request->telpon,
             'parent_phone_number' => $request->telpon_orangtua,
             'address' => $request->alamat 
+        ]);
+
+        $user->update([
+            'name' => $request->nama,
+            'email' => $request->email,
         ]);
 
         $data = [
